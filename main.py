@@ -1,50 +1,61 @@
+import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+class test_calculator(unittest.TestCase):
 
-def test_calculator():
-    driver = webdriver.Edge()
+    def setUp(self):
+        self.driver = webdriver.Edge()
 
-    driver.get("http://www.calculator.net/")
+    def test_calc_percentage(self):
+        driver = self.driver
 
-    title = driver.title
-    assert title == "Calculator.net: Free Online Calculators - Math, Fitness, Finance, Science"
+        driver.get("http://www.calculator.net/")
 
-    # implicit wait
-    driver.implicitly_wait(10)
+        # Comprobar title
+        title = driver.title
+        self.assertIn("Calculator.net: Free Online Calculators - Math, Fitness, Finance, Science", driver.title)
 
-    # Maximize the browser
-    driver.maximize_window()
+        # implicit wait
+        driver.implicitly_wait(10)
 
-    # Click on Math Calculators
-    math_calc = driver.find_element(by=By.XPATH, value="//div[@id='contentout']/table/tbody/tr/td[3]/div[@class='hh']")
-    math_calc.click()
+        # Maximize the browser
+        driver.maximize_window()
 
-    driver.implicitly_wait(10)
+        # Click on Math Calculators
+        math_calc = driver.find_element(by=By.XPATH, value="//div[@id='contentout']/table/tbody/tr/td[3]/div[@class='hh']")
+        math_calc.click()
 
-    # Click on Percent Calculators
-    perc_calc = driver.find_element(by=By.XPATH, value="//table[@class='smtb'][1]/tbody/tr/td/div[3]/a")
-    perc_calc.click()
+        driver.implicitly_wait(10)
 
-    # Enter value 10 in the first number of the percent Calculator
-    first_num = driver.find_element(by=By.ID, value="cpar1")
-    first_num.send_keys(10)
+        # Click on Percent Calculators
+        perc_calc = driver.find_element(by=By.XPATH, value="//table[@class='smtb'][1]/tbody/tr/td/div[3]/a")
+        perc_calc.click()
 
-    # Enter value 50 in the second number of the percent Calculator
-    second_num = driver.find_element(by=By.ID, value="cpar2")
-    second_num.send_keys(50)
+        # Enter value 10 in the first number of the percent Calculator
+        first_num = driver.find_element(by=By.ID, value="cpar1")
+        first_num.send_keys(10)
 
-    #Click Calculate Button
-    button = driver.find_element(by=By.XPATH, value=".//*[@value = 'Calculate']")
-    button.click()
+        # Enter value 50 in the second number of the percent Calculator
+        second_num = driver.find_element(by=By.ID, value="cpar2")
+        second_num.send_keys(50)
 
-    #Get the Result Text based on its xpath
-    result = driver.find_element(by=By.CLASS_NAME, value="h2result").text
+        #Click Calculate Button
+        button = driver.find_element(by=By.XPATH, value=".//*[@value = 'Calculate']")
+        button.click()
 
-    driver.implicitly_wait(10)
+        #Get the Result Text based on its xpath
+        result = driver.find_element(by=By.CLASS_NAME, value="h2result").text
+        self.assertIn("Result: 5", result)
+        driver.implicitly_wait(10)
 
-    #Print a Log In message to the screen
-    print(f"\nResult = {result}")
+        #Print a Log In message to the screen
+        print(f"\nResult = {result}")
 
-    # Close the Browser.
-    driver.close()
+    def tearDown(self):
+        # Close the Browser.
+        self.driver.close()
+
+if __name__ == "__main__":
+    unittest.main()
+
